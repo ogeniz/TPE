@@ -59,8 +59,8 @@ void preenche_matriz(Matriz *matriz)
    for(i = 0; i < matriz->row; i++)
       for(j = 0; j < matriz->col; j++)
       {
-	 printf("Entre com um valor inteiro para M[%hu,%hu] = ",i + 1,j + 1);
-	 scanf("%i",*(matriz->address + i) + j);
+				printf("Entre com um valor inteiro para M[%hu,%hu] = ",(ushort) (i + 1),(ushort) (j + 1));
+				scanf("%i",*(matriz->address + i) + j);
       }
    printf("\n");
 }
