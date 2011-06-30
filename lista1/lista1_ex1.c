@@ -10,7 +10,7 @@ int main(void)
   float c = 0.0, f = 0.0;
   printf("Entre com o valor da temperatura em Fahrenheit : ");
   scanf("%f", &c);
-  f = (9*c + 160)/5;
+  f = (9.0*c + 160.0)/5.0;
   printf("\n%.3f F eh igual a %.3f C\n\n",c,f);
   return 0;
 }
