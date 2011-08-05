@@ -88,6 +88,26 @@ int allocMat(IntMat *m)
 				 }
 	 return 1;
 }
+void readMat(IntMat *m)
+{
+	 int i,j;
+   for(i = 0; i < m->l; i++)
+      for(j = 0; j < m->c; j++)
+      {
+				 printf("Entre com um valor inteiro para M[%i,%i] = ",i + 1,j + 1);
+				 scanf("%i",*(m->ptr + i) + j);
+      }
+   printf("\n");	 
+}
+int multiMat(IntMat *m1, IntMat *m2, IntMat *m3)
+{
+	 int i,j,k;
+	 for(i = 0; i < m3->l; i++)
+      for(j = 0; j < m3->c; j++)
+				 for(k = 0; k < m1->c; k++)/*k < m2->l tambem esta correto*/
+						*(*(m3->ptr + i) + j) += (*(*(m1->ptr + i) + k)) * (*(*(m2->ptr + k) + j));
+	 return 0;
+}
 void freeMat(IntMat *m)
 {
 	 int i;
