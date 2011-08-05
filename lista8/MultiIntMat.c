@@ -108,6 +108,18 @@ int multiMat(IntMat *m1, IntMat *m2, IntMat *m3)
 						*(*(m3->ptr + i) + j) += (*(*(m1->ptr + i) + k)) * (*(*(m2->ptr + k) + j));
 	 return 0;
 }
+void showMat(IntMat *m)
+{
+	 int i,j;
+   printf("\n");
+   for(i = 0; i < m->l; i++)
+   {
+      for(j = 0; j < m->c; j++)
+				 printf("%i ",*(*(m->ptr + i) + j));
+      printf("\n");
+   }
+   printf("\n");
+}
 void freeMat(IntMat *m)
 {
 	 int i;
