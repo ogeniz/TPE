@@ -55,22 +55,43 @@ int main() {
   freeMat(&a);
   freeMat(&b);
   freeMat(&c);
-
+	
   return 0;
 }
 void readInfo(IntMat *m)
 {
-	printf("Entre com os valores da linha e coluna da Matriz.: ");
-	scanf("%i %i",&(m->l),&(m->c));
+	 printf("Entre com os valores da linha e coluna da Matriz.: ");
+	 scanf("%i %i",&(m->l),&(m->c));
 }
 int testDim(IntMat *m1, IntMat *m2, IntMat *m3)
 {
-	if(m1->c != m2->l)
-		return 0;
-	else
-		{
+	 if(m1->c != m2->l)
+			return 0;
+	 else
+	 {
 			m3->l = m1->l;
 			m3->c = m2->c;
 			return 1;
-		}
+	 }
+}
+int allocMat(IntMat *m)
+{
+	 int i;
+	 if( (m->ptr = (int **) malloc((m->l)*sizeof(int *))) == NULL )
+			return 0;
+	 else
+			for(i = 0; i < (m->l); i++)
+				 if( (*(m->ptr + i) = (int *) malloc((m->c) * sizeof(int))) == NULL )
+				 {
+						freeMat(m);
+						return 0;
+				 }
+	 return 1;
+}
+void freeMat(IntMat *m)
+{
+	 int i;
+	 for(i  = 0; i < (m->l); i++)
+      free(*(m->ptr + i));
+   free(m->ptr);
 }
