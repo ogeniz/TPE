@@ -2,7 +2,7 @@
 #include <string.h>
 
 int main(void)
-{  
+{
    unsigned char i = 0,j = 0,k = 0, l = 0, aux = 0;
    char url[256],protocolo[5] = "http",arquivo[30] = "index.html";
    char dominio[50],diretorio[50] = "default";
@@ -34,9 +34,11 @@ int main(void)
 	 diretorio[k] = url[i];
 	 k++;
 	 i++;
-	 diretorio[k] = '\0';
       }
+      diretorio[k] = '\0';
       printf("Diretorio.: %s\n",diretorio);
+      if(url[i])
+	 i++;
       if(i < aux && url[i])
 	 i++;
       while(url[i])
@@ -66,10 +68,10 @@ int main(void)
 	 diretorio[k] = url[i];
 	 k++;
 	 i++;
-	 diretorio[k] = '\0';
       }
+      diretorio[k] = '\0';
       printf("Diretorio.: %s\n",diretorio);
-      if(i < aux && url[i])
+      if(url[i])
 	 i++;
       while(url[i])
       {
