@@ -3,7 +3,7 @@
 
 #define FALSE 0
 #define TRUE 1
-#define MAXSTACK 2
+#define MAXSTACK 16 /*0-15 itens na pilha*/
 
 struct stack
 {
@@ -19,6 +19,7 @@ Stack *pop(Stack *);
 Stack *empty_stack(Stack *);
 unsigned char is_stack_empty(Stack *);
 unsigned char stack_size(Stack *);
+unsigned char is_stack_full(Stack *);
 void print_stack(Stack *);
-
+void pr13(void);
 #endif

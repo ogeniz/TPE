@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include "stack.h"
 
 Stack *create_stack(void)/*cria pilha vazia*/
@@ -22,11 +24,18 @@ Stack *push(Stack *pilha, float info)/*empilha novo node*/
       printf("\n");
       new_topo->value = info;/*atribui ao campo value o valor passado a funcao*/
       new_topo->next = pilha;/*empilha new_node na pilha*/
-      printf("Empilhando %.2f",new_topo->value);
       return new_topo;
    }
    perror("\nStack Overflow\n\n");
    return pilha;
+}
+
+Stack *create_stack_node(void)/*cria node para ser empilhado*/
+{
+   Stack *topo = NULL;
+   if( (topo = (Stack *) malloc(sizeof(Stack))) == NULL )
+      return NULL;/*retorna NULL se ocorrer erro na alocaccao*/
+   return topo;/*retorna o enderecco do bloco de memoria alocado para o new_node*/
 }
 
 Stack *empty_stack(Stack *pilha)
@@ -54,14 +63,6 @@ Stack *pop(Stack *pilha)/*desempilha o topo da pilha*/
    
 }
 
-Stack *create_stack_node(void)/*cria node para ser empilhado*/
-{
-   Stack *topo = NULL;
-   if( (topo = (Stack *) malloc(sizeof(Stack))) == NULL )
-      return NULL;/*retorna NULL se ocorrer erro na alocaccao*/
-   return topo;/*retorna o enderecco do bloco de memoria alocado para o new_node*/
-}
-
 unsigned char is_stack_empty(Stack *pilha)/*verifica se a pilha esta vazia*/
 {
    Stack *topo = pilha;
@@ -69,6 +70,15 @@ unsigned char is_stack_empty(Stack *pilha)/*verifica se a pilha esta vazia*/
       return 1;
    else /*pilha com pelo menos 1(um) elemento*/
       return 0;
+}
+
+unsigned char is_stack_full(Stack *pilha)
+{
+   unsigned char size = stack_size(pilha);/*avalia o tamanho da pilha*/
+   if(size < 16)/*verifica se a pilha está cheia*/
+      return 0;/*se for possivel acrescentar valores na pilha*/
+   else
+      return 1;/*se a pilha estiver cheia*/
 }
 
 unsigned char stack_size(Stack *pilha)
@@ -93,6 +103,131 @@ void print_stack(Stack *pilha)
          printf("%.2f -> ",topo->value);
          topo = topo->next;
       }
-      printf("NULL são %hu elementos na pilha\n",stack_size(pilha));
+      printf("NULL %u elemento(s) na pilha\n",stack_size(pilha));
    }
+}
+
+void pr13(void)
+{
+   Stack *pilha = create_stack();
+   float sum = 0, sub = 0, mult = 0, frac = 0.0;
+   char line[MAXSTACK], *substring;
+   unsigned char i = 0, j = sizeof(line), flag = TRUE;
+
+   while(flag)
+   {
+      i = 0;
+      while(i < j)
+      {
+         *(line + i) = fgetc(stdin);
+         if(*(line + i) == 0xa)
+            break;
+         i++;
+      }
+      *(line + i) = '\0';
+      
+      if(!strcmp(line,"quit"))/*finaliza o lacco principal*/
+      {
+         flag = FALSE;
+         continue;
+      }
+      if(!strcmp(line,"print"))/*exibe o status da pilha*/
+         print_stack(pilha);
+
+      if(!(strcmp(line,"empty")))/*esvazia a pilha*/
+         pilha = empty_stack(pilha);
+         
+      substring = strtok(line," ");/*a funccao strtok divide a string em substrings com o " " como separado*/
+      while(substring != NULL)
+      {
+         if(*(substring) == 0x5f)/* _ */
+            pilha = push(pilha,(float) -strtod(substring + 1,NULL));
+         
+         if(isdigit(*substring))
+            pilha = push(pilha,atof(substring));
+         
+         if(*(substring) == 0x2b)/* + */
+         {
+            if(stack_size(pilha) < 2)
+            {
+               printf("\nQuantidade insuficiente de valores na pilha para fazer qualquer operaccao\n");
+               break;
+            }
+            else
+            {
+               sum = pilha->value + pilha->next->value;
+               printf("\n\n%.2f + %.2f = %.2f\n\n",pilha->value,pilha->next->value,sum);
+               i = 0;
+               while(i < 2)
+               {
+                  pilha = pop(pilha);
+                  i++;
+               }
+               pilha = push(pilha,sum);
+            }
+         }
+         if(*(substring) == 0x2d)/* - */
+         {
+            if(stack_size(pilha) < 2)
+            {
+               printf("\nQuantidade insuficiente de valores na pilha para fazer qualquer operaccao\n");
+               break;
+            }
+            else
+            {
+               sub = pilha->value - pilha->next->value;
+               printf("\n\n%.2f - %.2f = %.2f\n\n",pilha->value,pilha->next->value,sub);
+               i = 0;
+               while(i < 2)
+               {
+                  pilha = pop(pilha);
+                  i++;
+               }
+               pilha = push(pilha,sub);
+            }
+         }
+         if(*(substring) == 0x2a)/* * */
+         {
+            if(stack_size(pilha) < 2)
+            {
+               printf("\nQuantidade insuficiente de valores na pilha para fazer qualquer operaccao\n");
+               break;
+            }
+            else
+            {
+               mult = pilha->value * pilha->next->value;
+               printf("\n\n%.2f * %.2f = %.2f\n\n",pilha->value,pilha->next->value,mult);
+               i = 0;
+               while(i < 2)
+               {
+                  pilha = pop(pilha);
+                  i++;
+               }
+               pilha = push(pilha,mult);
+            }
+         }
+         if(*(substring) == 0x2f)/* / */
+         {
+            if(stack_size(pilha) < 2)
+            {
+               printf("\nQuantidade insuficiente de valores na pilha para fazer qualquer operaccao\n");
+               break;
+            }
+            else
+            {
+               frac = pilha->value / pilha->next->value;
+               printf("\n\n%.2f / %.2f = %.2f\n\n",pilha->value,pilha->next->value,frac);
+               i = 0;
+               while(i < 2)
+               {
+                  pilha = pop(pilha);
+                  i++;
+               }
+               pilha = push(pilha,frac);
+            }
+         }
+         substring = strtok(NULL," ");/*instrui a funccao a contiuar a partir da chamada anterior*/
+      }      
+   }
+   pilha = empty_stack(pilha);
 }
