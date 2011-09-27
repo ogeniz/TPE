@@ -4,6 +4,7 @@
 #define FALSE 0
 #define TRUE 1
 #define MAXSTACK 16 /*0-15 itens na pilha*/
+#define M_PI 3.14159265358979323846	/* pi */
 
 struct stack
 {
@@ -22,4 +23,5 @@ unsigned char stack_size(Stack *);
 unsigned char is_stack_full(Stack *);
 void print_stack(Stack *);
 void pr13(void);
+
 #endif

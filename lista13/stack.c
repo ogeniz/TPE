@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 #include "stack.h"
 
 Stack *create_stack(void)/*cria pilha vazia*/
@@ -26,7 +27,7 @@ Stack *push(Stack *pilha, float info)/*empilha novo node*/
       new_topo->next = pilha;/*empilha new_node na pilha*/
       return new_topo;
    }
-   perror("\nStack Overflow\n\n");
+   printf("\nStack Overflow\n\n");
    return pilha;
 }
 
@@ -110,7 +111,7 @@ void print_stack(Stack *pilha)
 void pr13(void)
 {
    Stack *pilha = create_stack();
-   float sum = 0, sub = 0, mult = 0, frac = 0.0;
+   float sum = 0, sub = 0, mult = 0, frac = 0.0, seno = 0.0, cosseno = 0.0;
    char line[MAXSTACK], *substring;
    unsigned char i = 0, j = sizeof(line), flag = TRUE;
 
@@ -120,7 +121,7 @@ void pr13(void)
       while(i < j)
       {
          *(line + i) = fgetc(stdin);
-         if(*(line + i) == 0xa)
+         if(*(line + i) == 0xa)/*\n*/
             break;
          i++;
       }
@@ -145,12 +146,44 @@ void pr13(void)
          
          if(isdigit(*substring))
             pilha = push(pilha,atof(substring));
+
+         if(!(strcmp(substring,"sen")))
+         {
+            if(is_stack_empty(pilha))
+            {
+               printf("\nQuantidade insuficiente de valores na pilha para fazer a operaccao\n");
+               break;
+            }
+            else
+            {
+               seno = sinf(pilha->value * (M_PI / 180));
+               printf("\n\nsen(%.2f) = %.2f\n\n",pilha->value,seno);
+               pilha = pop(pilha);
+               pilha = push(pilha,seno);
+            }
+         }
+
+         if(!(strcmp(substring,"cos")))
+         {
+            if(is_stack_empty(pilha))
+            {
+               printf("\nQuantidade insuficiente de valores na pilha para fazer a operaccao\n");
+               break;
+            }
+            else
+            {
+               cosseno = cosf(pilha->value * (M_PI / 180));
+               printf("\n\nsen(%.2f) = %.2f\n\n",pilha->value,cosseno);
+               pilha = pop(pilha);
+               pilha = push(pilha,cosseno);
+            }
+         }
          
          if(*(substring) == 0x2b)/* + */
          {
             if(stack_size(pilha) < 2)
             {
-               printf("\nQuantidade insuficiente de valores na pilha para fazer qualquer operaccao\n");
+               printf("\nQuantidade insuficiente de valores na pilha para fazer a operaccao\n");
                break;
             }
             else
